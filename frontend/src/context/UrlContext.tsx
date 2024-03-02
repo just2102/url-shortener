@@ -4,6 +4,7 @@ import { UrlData } from "src/api/urlShortenerApi/types";
 import { UrlApi } from "src/api/urlShortenerApi/urlApi";
 import { showInfoToast } from "src/helpers/toastHelper";
 import { AuthContext } from "./AuthContext";
+import { isValidUrl } from "src/helpers/isValidUrl";
 
 type UrlContextType = {
   urls: UrlData[];
@@ -35,6 +36,10 @@ export const UrlProvider = ({ children }: { children: React.ReactNode }) => {
     e.preventDefault();
     if (!urlToShorten) {
       showInfoToast("Please enter a URL to shorten");
+      return;
+    }
+    if (!isValidUrl(urlToShorten)) {
+      showInfoToast("Please enter a valid URL");
       return;
     }
     const response = await toast.promise(UrlApi.shortenUrl(urlToShorten), {
