@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import { GoogleRedirect } from "./components/GoogleRedirect";
 import { AuthProvider } from "./context/AuthContext.tsx";
+import { UrlProvider } from "./context/UrlContext.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,7 +26,9 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <UrlProvider>
+        <RouterProvider router={router} />
+      </UrlProvider>
     </AuthProvider>
   </React.StrictMode>
 );

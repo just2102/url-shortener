@@ -1,18 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import styles from "./MyUrlsWidget.module.scss";
 import { Urls } from "./Urls";
-import { UrlData } from "src/api/urlShortenerApi/types";
-import { UrlApi } from "src/api/urlShortenerApi/urlApi";
+import { UrlContext } from "src/context/UrlContext";
 
 export const MyUrlsWidget = () => {
-  const [urls, setUrls] = useState<UrlData[]>([]);
-  useEffect(() => {
-    const fetchUrls = async () => {
-      const urls = await UrlApi.getUrls();
-      setUrls(urls);
-    };
-    fetchUrls();
-  }, []);
+  const { urls } = useContext(UrlContext);
+
+  if (!urls?.length) return null;
   return (
     <div className={styles.myUrlsWidget}>
       <h2>My URLs</h2>

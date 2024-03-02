@@ -12,6 +12,7 @@ import { MyUrlsWidget } from "./components/MyUrlsWidget";
 
 function App() {
   const { handleGoogleLogin, isAuthorized } = useContext(AuthContext);
+
   return (
     <>
       <Header />

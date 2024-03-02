@@ -4,9 +4,8 @@ import { AuthorizedUser } from "src/api/userApi/types";
 
 type AuthContextType = {
   isAuthorized: boolean;
-  currentUser: AuthorizedUser | null; // add type later
+  currentUser: AuthorizedUser | null;
 
-  signIn: () => void;
   processAuth: ({
     accessToken,
     refreshToken,
@@ -27,10 +26,6 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<AuthorizedUser | null>(null);
-
-  const signIn = () => {
-    console.log("signing in...");
-  };
 
   const processAuth = async ({
     accessToken,
@@ -75,7 +70,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       value={{
         isAuthorized,
         currentUser,
-        signIn,
         processAuth,
         handleGoogleLogin,
       }}
