@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "src/context/AuthContext";
 
 export const GoogleRedirect = () => {
-  console.log("inside of googleRedirectComponent");
   const navigate = useNavigate();
   const location = useLocation();
   const { processAuth } = useContext(AuthContext);
@@ -13,11 +12,15 @@ export const GoogleRedirect = () => {
       const searchParams = new URLSearchParams(location.search);
       const accessToken = searchParams.get("accessToken");
       const refreshToken = searchParams.get("refreshToken");
-      if (accessToken && refreshToken) {
-        const res = await processAuth({ accessToken, refreshToken });
-        if (res.isAuthorized) {
-          navigate("/");
-        }
+      if (!accessToken || !refreshToken) {
+        return navigate("/");
+      }
+      const res = await processAuth({
+        accessToken,
+        refreshToken,
+      });
+      if (res.isAuthorized) {
+        navigate("/");
       }
     };
     handleRedirect();
