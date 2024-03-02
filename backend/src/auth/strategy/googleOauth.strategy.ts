@@ -24,7 +24,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   ): Promise<void> {
     const { name, emails } = profile;
     if (!name || !emails)
-      throw new Error('Google profile does not have name or email');
+      throw new Error('Missing name or email in google profile.');
     const stateObject: {
       source: string;
     } = JSON.parse((req.query?.state as string) || '{}');

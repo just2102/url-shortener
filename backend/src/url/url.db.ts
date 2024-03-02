@@ -9,7 +9,6 @@ import { UrlFailedToSave } from './errors/UrlFailedToSave';
 
 @Injectable()
 export class UrlDbService {
-  private TEN_HOURS_IN_SECONDS = 36_000;
   private hashName = 'shortLinks';
 
   constructor(

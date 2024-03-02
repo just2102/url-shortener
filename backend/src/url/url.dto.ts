@@ -10,12 +10,6 @@ export class ShortenAndCacheUrlInternalDto {
   userId: string;
 }
 
-export class SetShortUrlToCacheInternalDto {
-  key: string;
-  originalLink: string;
-  shortUrl: string;
-}
-
 export class ShortenUrlResponseDto {
   shortUrl: string;
 }
