@@ -4,8 +4,10 @@ import { AuthorizedUser } from "./types";
 export class UserApi {
   private static baseApiEndpoint = "user";
 
-  static async getUser() {
+  static async getUser(): Promise<AuthorizedUser | undefined> {
     const res = await Requests.get(this.baseApiEndpoint);
-    return res as AuthorizedUser;
+    if (res) {
+      return res as AuthorizedUser;
+    }
   }
 }

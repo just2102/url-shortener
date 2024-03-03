@@ -1,9 +1,14 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 
 import { GoogleOAuthGuard } from './guard/google.guard';
-import { GoogleUserContext } from './auth.types';
+import {
+  GoogleUserContext,
+  RefreshTokensResponse,
+  UserRefreshTokenContext,
+} from './auth.types';
 import { AuthService } from './auth.service';
+import { JwtRefreshGuard } from './guard/jwtRefresh.guard';
 
 @Controller('/auth')
 export class AuthController {
@@ -25,5 +30,14 @@ export class AuthController {
     res.redirect(
       `${process.env.FRONTEND_URL}/auth/google-redirect?accessToken=${accessToken}&refreshToken=${refreshToken}`,
     );
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @Post('/refreshToken')
+  async refreshToken(
+    @Req() req: UserRefreshTokenContext,
+  ): Promise<RefreshTokensResponse> {
+    const user = req.user;
+    return await this.authService.refreshTokens(user.email, user.refreshToken);
   }
 }

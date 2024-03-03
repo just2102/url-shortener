@@ -19,14 +19,20 @@ export class UserDbService {
     return await this.userModel.findOne({ email });
   }
 
-  public async createUser({ email, name, refreshToken }: CreateUserPayload) {
-    return await this.userModel.create({ email, refreshToken, name });
+  public async createUser({ email, name }: CreateUserPayload) {
+    return await this.userModel.create({
+      email,
+      name,
+    });
   }
 
   public async updateRefreshToken({
     email,
-    refreshToken,
+    hashedRefreshToken,
   }: UpdateRefreshTokenPayload) {
-    return await this.userModel.updateOne({ email }, { refreshToken });
+    return await this.userModel.updateOne(
+      { email },
+      { refreshToken: hashedRefreshToken },
+    );
   }
 }

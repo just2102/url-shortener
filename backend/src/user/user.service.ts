@@ -9,6 +9,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UserNotFound } from './errors/UserNotFound';
 import { UserCreationError } from './errors/UserCreationError';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -27,11 +28,10 @@ export class UserService {
     return user;
   }
 
-  public async createUser({ email, name, refreshToken }: CreateUserPayload) {
+  public async createUser({ email, name }: CreateUserPayload) {
     const createdUser = await this.userDbService.createUser({
       email,
       name,
-      refreshToken,
     });
     if (!createdUser) throw new UserCreationError();
     return createdUser;
@@ -39,41 +39,51 @@ export class UserService {
 
   public async updateRefreshToken({
     email,
-    refreshToken,
+    hashedRefreshToken,
   }: UpdateRefreshTokenPayload) {
     return await this.userDbService.updateRefreshToken({
       email,
-      refreshToken,
+      hashedRefreshToken,
     });
   }
 
-  public generateTokens({
+  public async generateAndUpdateTokens({
     email,
-    name,
-  }: GenerateTokenPayload): GenerateTokensResponse {
+    userId,
+  }: GenerateTokenPayload): Promise<GenerateTokensResponse> {
     const accessToken = this.generateAccessToken({
       email: email,
-      name: name,
+      userId: userId,
     });
     const refreshToken = this.generateRefreshToken({
       email: email,
-      name: name,
+      userId: userId,
     });
 
-    this.updateRefreshToken({
+    const hashedRefreshToken = await this.hashData(refreshToken);
+
+    await this.updateRefreshToken({
       email: email,
-      refreshToken,
+      hashedRefreshToken,
     });
     return { accessToken, refreshToken };
   }
 
-  private generateAccessToken({ email, name }: GenerateTokenPayload): string {
-    const payload = { email: email, name: name };
+  private async hashData(data: string) {
+    const SALT_NUMBER = 10;
+    return await bcrypt.hash(data, SALT_NUMBER);
+  }
+
+  private generateAccessToken({ email, userId }: GenerateTokenPayload): string {
+    const payload = { email: email, userId: userId };
     return this.jwtService.sign(payload, { secret: process.env.JWT_SECRET });
   }
 
-  private generateRefreshToken({ email, name }: GenerateTokenPayload): string {
-    const payload = { email: email, name: name };
+  private generateRefreshToken({
+    email,
+    userId,
+  }: GenerateTokenPayload): string {
+    const payload = { email: email, userId: userId };
     return this.jwtService.sign(payload, {
       secret: process.env.JWT_REFRESH_SECRET,
       expiresIn: '7d',

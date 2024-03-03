@@ -5,18 +5,17 @@ export class GenerateTokensResponse {
 
 export class GenerateTokenPayload {
   email: string;
-  name: string;
+  userId: string;
 }
 
 export class CreateUserPayload {
   email: string;
   name: string;
-  refreshToken: string;
 }
 
 export class UpdateRefreshTokenPayload {
   email: string;
-  refreshToken: string;
+  hashedRefreshToken: string;
 }
 
 export class UserAuthContext extends Request {

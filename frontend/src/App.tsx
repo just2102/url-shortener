@@ -30,7 +30,7 @@ function App() {
         autoClose={3000}
         draggable
         pauseOnHover
-        limit={2}
+        limit={1}
       />
     </>
   );
