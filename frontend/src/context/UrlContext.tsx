@@ -58,7 +58,7 @@ export const UrlProvider = ({ children }: { children: React.ReactNode }) => {
       setUrls(urls);
     };
     getUrls();
-  }, [isAuthorized]);
+  }, [isAuthorized, shortenedUrl]);
   return (
     <UrlContext.Provider
       value={{
