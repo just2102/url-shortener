@@ -13,7 +13,7 @@ export class Url {
   @Prop({ required: true })
   shortLink: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, index: true })
   userId: string;
 }
 
