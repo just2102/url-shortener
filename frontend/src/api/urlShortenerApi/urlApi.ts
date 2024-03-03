@@ -11,6 +11,8 @@ export class UrlApi {
 
   static async getUrls() {
     const res = await Requests.get(`${this.baseApiEndpoint}/getUrlsForUser`);
-    return res as UrlData[];
+    if (res) {
+      return res as UrlData[];
+    }
   }
 }
