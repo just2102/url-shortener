@@ -17,14 +17,16 @@ export class UrlService {
     userId,
   }: ShortenAndCacheUrlInternalDto): Promise<ShortenUrlResponseDto> {
     const shortLink = nanoid(this.UUID_LENGTH);
+
+    const originalLinkWithProtocol = this.appendProtocolIfMissing(originalLink);
     await Promise.all([
       this.urlDbService.saveUrlForUser({
-        originalLink,
+        originalLink: originalLinkWithProtocol,
         shortLink,
         userId,
       }),
       this.urlDbService.cacheShortUrl({
-        shortLink,
+        shortLink: originalLinkWithProtocol,
         originalLink,
       }),
     ]);
@@ -32,6 +34,14 @@ export class UrlService {
     return {
       shortUrl: `${this.BASE_URL}/${shortLink}`,
     };
+  }
+
+  private appendProtocolIfMissing(url: string) {
+    const protocolRegex = /^(http:\/\/|https:\/\/)/;
+    if (!protocolRegex.test(url)) {
+      return `http://${url}`;
+    }
+    return url;
   }
 
   public async getOriginalUrlByShortUrl(shortUrl: string) {
