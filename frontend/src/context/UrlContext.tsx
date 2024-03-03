@@ -8,7 +8,6 @@ import { isValidUrl } from "src/helpers/isValidUrl";
 
 type UrlContextType = {
   urls: UrlData[];
-  setUrls: React.Dispatch<React.SetStateAction<UrlData[]>>;
 
   handleShortenButtonClick: (
     e: React.FormEvent<HTMLFormElement>
@@ -63,7 +62,6 @@ export const UrlProvider = ({ children }: { children: React.ReactNode }) => {
     <UrlContext.Provider
       value={{
         urls,
-        setUrls,
         handleShortenButtonClick,
 
         urlToShorten,

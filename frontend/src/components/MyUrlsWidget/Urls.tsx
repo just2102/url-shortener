@@ -9,7 +9,9 @@ export const Urls = ({ urls }: UrlsProps) => {
       {urls.map((url, index) => {
         return (
           <li key={index}>
-            <a href={url.originalLink}>{url.shortLink}</a>
+            <a href={import.meta.env.VITE_BACKEND_URL + "/" + url.shortLink}>
+              {url.shortLink}
+            </a>
           </li>
         );
       })}
