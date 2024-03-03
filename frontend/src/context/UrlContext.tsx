@@ -54,7 +54,7 @@ export const UrlProvider = ({ children }: { children: React.ReactNode }) => {
     const getUrls = async () => {
       if (!isAuthorized) return;
       const urls = await UrlApi.getUrls();
-      setUrls(urls);
+      if (urls) setUrls(urls);
     };
     getUrls();
   }, [isAuthorized, shortenedUrl]);
